@@ -25,7 +25,7 @@ const createOrderIntoDb = async (order: IOrder) => {
 const retrieveOrdersFromDb = async (email: string) => {
   if (email) {
     const orders = await Order.find({
-      email: { $regex: email, $options: "i" },
+      email: email,
     });
     return orders;
   } else {
