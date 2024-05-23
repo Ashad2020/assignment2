@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import { OrderServices } from "./order.service";
+import orderValidationSchema from "./order.validation";
 
 const CreateOrder = async (req: Request, res: Response) => {
   try {
     const order = req.body;
-
-    const result = await OrderServices.createOrderIntoDb(order);
+    const zodParsedOrder = orderValidationSchema.parse(order);
+    const result = await OrderServices.createOrderIntoDb(zodParsedOrder);
     if (result === "stock_empty") {
       res.status(200).json({
         success: false,
@@ -24,14 +25,16 @@ const CreateOrder = async (req: Request, res: Response) => {
       });
     }
   } catch (err) {
-    console.log(err);
+    res.status(200).json({
+      success: false,
+      message: err,
+    });
   }
 };
 
 const retrieveOrders = async (req: Request, res: Response) => {
   try {
     const { email } = req.query;
-    console.log({ email });
 
     const result = await OrderServices.retrieveOrdersFromDb(email as string);
 
@@ -48,7 +51,10 @@ const retrieveOrders = async (req: Request, res: Response) => {
       });
     }
   } catch (err) {
-    console.log(err);
+    res.status(200).json({
+      success: false,
+      message: err,
+    });
   }
 };
 
