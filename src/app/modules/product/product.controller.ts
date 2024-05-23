@@ -1,12 +1,16 @@
 import { Request, Response } from "express";
 import { ProductServices } from "./product.service";
 
+import productValidationSchema from "./product.validation";
+
 const createProduct = async (req: Request, res: Response) => {
   try {
     const product = req.body;
 
-    const result = await ProductServices.createProductIntoDb(product);
+    const zodParsedData = productValidationSchema.parse(product);
 
+    const result = await ProductServices.createProductIntoDb(zodParsedData);
+    console.log({ result });
     if (result) {
       res.status(200).json({
         success: true,
@@ -17,8 +21,7 @@ const createProduct = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(200).json({
       success: false,
-      message: `${err.errmsg}`,
-      data: null,
+      message: err,
     });
   }
 };
@@ -47,8 +50,7 @@ const retrieveProducts = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(200).json({
       success: false,
-      message: `${err.errmsg}`,
-      data: null,
+      message: err,
     });
   }
 };
@@ -74,8 +76,7 @@ const retrieveProductById = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(200).json({
       success: false,
-      message: `${err.errmsg}`,
-      data: null,
+      message: err,
     });
   }
 };
@@ -84,10 +85,11 @@ const updateProduct = async (req: Request, res: Response) => {
     const { productId } = req.params;
 
     const updateProduct = req.body;
+    const zodParsedData = productValidationSchema.parse(updateProduct);
 
     const result = await ProductServices.updateProductIntoDb(
       productId,
-      updateProduct
+      zodParsedData
     );
 
     if (result) {
@@ -106,27 +108,33 @@ const updateProduct = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(200).json({
       success: false,
-      message: `${err.errmsg}`,
-      data: null,
+      message: err,
     });
   }
 };
 
 const deleteProduct = async (req: Request, res: Response) => {
-  const { productId } = req.params;
-  const result = await ProductServices.deleteProductFromDb(productId);
+  try {
+    const { productId } = req.params;
+    const result = await ProductServices.deleteProductFromDb(productId);
 
-  if (result) {
-    res.status(200).json({
-      success: true,
-      message: "Product deleted successfully!",
-      data: null,
-    });
-  } else {
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: "Product deleted successfully!",
+        data: null,
+      });
+    } else {
+      res.status(200).json({
+        success: false,
+        message: "Product Not Found!",
+        data: result,
+      });
+    }
+  } catch (err) {
     res.status(200).json({
       success: false,
-      message: "Product Not Found!",
-      data: result,
+      message: err,
     });
   }
 };
