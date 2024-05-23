@@ -30,6 +30,7 @@ export const ProductSchema = new Schema<IProduct>({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   description: {
     type: String,
