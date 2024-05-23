@@ -13,8 +13,8 @@ This project is a TypeScript-based Express server with MongoDB integration using
    ```
 3. **Set up environment variables:**
    ```bash
-   MONGODB_URI=<your-mongodb-uri>
-   PORT=<server-port>
+   DB_URL=your-mongodb-uri
+   PORT=server-port
    ```
 4. **Start the server:**
    The server will start at the specified port, and you can now access the APIs.
