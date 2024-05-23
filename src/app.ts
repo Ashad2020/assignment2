@@ -11,6 +11,11 @@ app.use(cors());
 app.use("/api/products", ProductRoutes);
 app.use("/api/orders", OrderRoutes);
 
+// Route handler for the root path
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello World!");
+});
+
 // Not Found Handler
 app.use((req: Request, res: Response) => {
   res.status(404).json({
@@ -18,8 +23,4 @@ app.use((req: Request, res: Response) => {
     message: "Route not found",
   });
 });
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
-
 export default app;
