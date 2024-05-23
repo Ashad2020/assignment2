@@ -4,7 +4,7 @@ import { IOrder } from "./order.interface";
 import { Order } from "./order.model";
 
 const createOrderIntoDb = async (order: IOrder) => {
-  let product = await Product.findById(order.productId);
+  const product = await Product.findById(order.productId);
   // console.log(product);
 
   if (product?.inventory.inStock) {

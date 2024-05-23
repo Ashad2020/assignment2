@@ -12,7 +12,7 @@ app.use("/api/products", ProductRoutes);
 app.use("/api/orders", OrderRoutes);
 
 // Not Found Handler
-app.use((req, res, next) => {
+app.use((req: Request, res: Response) => {
   res.status(404).json({
     success: false,
     message: "Route not found",

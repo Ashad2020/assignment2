@@ -10,7 +10,7 @@ const createProduct = async (req: Request, res: Response) => {
     const zodParsedData = productValidationSchema.parse(product);
 
     const result = await ProductServices.createProductIntoDb(zodParsedData);
-    console.log({ result });
+
     if (result) {
       res.status(200).json({
         success: true,
@@ -18,7 +18,7 @@ const createProduct = async (req: Request, res: Response) => {
         data: result,
       });
     }
-  } catch (err: any) {
+  } catch (err) {
     res.status(200).json({
       success: false,
       message: err,
@@ -47,7 +47,7 @@ const retrieveProducts = async (req: Request, res: Response) => {
         data: result,
       });
     }
-  } catch (err: any) {
+  } catch (err) {
     res.status(200).json({
       success: false,
       message: err,
@@ -73,7 +73,7 @@ const retrieveProductById = async (req: Request, res: Response) => {
         data: result,
       });
     }
-  } catch (err: any) {
+  } catch (err) {
     res.status(200).json({
       success: false,
       message: err,
@@ -105,7 +105,7 @@ const updateProduct = async (req: Request, res: Response) => {
         data: result,
       });
     }
-  } catch (err: any) {
+  } catch (err) {
     res.status(200).json({
       success: false,
       message: err,
