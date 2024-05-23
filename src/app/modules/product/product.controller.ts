@@ -7,20 +7,25 @@ const createProduct = async (req: Request, res: Response) => {
 
     const result = await ProductServices.createProductIntoDb(product);
 
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: "Product created successfully!",
+        data: result,
+      });
+    }
+  } catch (err: any) {
     res.status(200).json({
-      success: true,
-      message: "Product created successfully!",
-      data: result,
+      success: false,
+      message: `${err.errmsg}`,
+      data: null,
     });
-  } catch (err) {
-    console.log(err);
   }
 };
 
 const retrieveProducts = async (req: Request, res: Response) => {
   try {
     const { searchTerm } = req.query;
-    console.log({ searchTerm });
 
     const result = await ProductServices.retrieveProductsFromDb(
       searchTerm as string
@@ -33,20 +38,24 @@ const retrieveProducts = async (req: Request, res: Response) => {
         data: result,
       });
     } else {
-      res.status(404).json({
+      res.status(200).json({
         success: false,
-        message: "Products Not Found!",
+        message: "There are no products found!",
         data: result,
       });
     }
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    res.status(200).json({
+      success: false,
+      message: `${err.errmsg}`,
+      data: null,
+    });
   }
 };
 const retrieveProductById = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
-    console.log(productId);
+
     const result = await ProductServices.retrieveProductByIdFromDb(productId);
 
     if (result) {
@@ -62,8 +71,12 @@ const retrieveProductById = async (req: Request, res: Response) => {
         data: result,
       });
     }
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    res.status(200).json({
+      success: false,
+      message: `${err.errmsg}`,
+      data: null,
+    });
   }
 };
 const updateProduct = async (req: Request, res: Response) => {
@@ -84,14 +97,18 @@ const updateProduct = async (req: Request, res: Response) => {
         data: result,
       });
     } else {
-      res.status(404).json({
+      res.status(200).json({
         success: false,
         message: "Product Not Found!",
         data: result,
       });
     }
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    res.status(200).json({
+      success: false,
+      message: `${err.errmsg}`,
+      data: null,
+    });
   }
 };
 
@@ -106,7 +123,7 @@ const deleteProduct = async (req: Request, res: Response) => {
       data: null,
     });
   } else {
-    res.status(404).json({
+    res.status(200).json({
       success: false,
       message: "Product Not Found!",
       data: result,
